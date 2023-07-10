@@ -1,5 +1,5 @@
-import { CatApiService, BreedApiService } from './js/cat-api';
-import { renderBreed, renderCat } from './js/tamplate-cats';
+import { CatApiService } from './cat-api';
+import { renderBreed, renderCat } from './tamplate-cats';
 import SlimSelect from 'slim-select';
 
 const containerList = document.querySelector('div.cat-info');
@@ -8,7 +8,6 @@ const errorEl = document.querySelector('p.error');
 export const loaderEl = document.querySelector('p.loader');
 
 const catApiService = new CatApiService();
-const breedApiService = new BreedApiService();
 
 const slimSelect = () =>
   new SlimSelect({
@@ -20,7 +19,7 @@ const slimSelect = () =>
 
 const loadedBreedInSelect = function () {
   catApiService
-    .fetchBreeds()
+    .fetchCats('breeds')
     .then(data => {
       const breedMarkup = renderBreed(data);
       breedSelect.innerHTML = breedMarkup;
@@ -37,8 +36,8 @@ loadedBreedInSelect();
 const onBreedClick = function (event) {
   const breedId = event.target.value;
 
-  breedApiService
-    .fetchCatByBreed(breedId)
+  catApiService
+    .fetchCats('images/search', { breed_ids: breedId })
     .then(cat => {
       const catMarkup = renderCat(cat);
       containerList.innerHTML = catMarkup;

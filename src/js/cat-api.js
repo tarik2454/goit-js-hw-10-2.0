@@ -1,34 +1,18 @@
-import { loaderEl } from '../index';
+import { loaderEl } from './index';
 export { CatApiService, BreedApiService };
 
 const API_KEY =
   'live_k7FRqOIR1HmsAosTrf291Jo6eJSQrXVGjReRBj6muk49klCQRWDCAnXNdxwojspx';
+const BASE_URL = 'https://api.thecatapi.com/v1';
 
 class CatApiService {
   constructor() {}
 
-  fetchBreeds() {
-    return fetch(`https://api.thecatapi.com/v1/breeds?&api_key=${API_KEY}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.status);
-        }
-        loaderEl.classList.add('show');
-        return response.json();
-      })
-      .then(data => {
-        loaderEl.classList.remove('show');
-        return data;
-      });
-  }
-}
-
-class BreedApiService {
-  constructor() {}
-
-  fetchCatByBreed(breedId) {
+  fetchCats(endPoint, params = {}) {
     return fetch(
-      `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}&api_key=${API_KEY}`
+      `${BASE_URL}/${endPoint}?api_key=${API_KEY}&${new URLSearchParams(
+        params
+      )}`
     )
       .then(response => {
         if (!response.ok) {
